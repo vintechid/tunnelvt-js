@@ -4,18 +4,16 @@ import { TunnelVT } from "../lib/client.js";
 
 const { values } = parseArgs({
   options: {
-    token: { type: "string", short: "t", default: "" },
-    app:   { type: "string", short: "a" },
-    port:  { type: "string", short: "p" },
-    help:  { type: "boolean", short: "h" },
+    app:  { type: "string", short: "a" },
+    port: { type: "string", short: "p" },
+    help: { type: "boolean", short: "h" },
   },
 });
 
 if (values.help || !values.app || !values.port) {
-  console.error("Usage: tunnelvt -a <app> -p <port> [-t <token>]");
-  console.error("  -a, --app    app name  (required)");
-  console.error("  -p, --port   local port (required)");
-  console.error("  -t, --token  auth token");
+  console.error("Usage: tunnelvt -a <app> -p <port>");
+  console.error("  -a, --app   app name  (required)");
+  console.error("  -p, --port  local port (required)");
   process.exit(values.help ? 0 : 1);
 }
 
@@ -25,6 +23,6 @@ if (isNaN(port) || port < 1 || port > 65535) {
   process.exit(1);
 }
 
-new TunnelVT(values.app, port, values.token || undefined)
+new TunnelVT(values.app, port)
   .connect()
   .catch((err) => { console.error("[tunnelvt] fatal:", err.message); process.exit(1); });
